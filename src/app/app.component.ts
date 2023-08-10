@@ -26,9 +26,9 @@ export class AppComponent implements OnInit {
         this._formBuilder.group({
           input1: '',
           subFields: this._formBuilder.array([]),
+          links: this._formBuilder.array([]),
         })
       );
-      this.addSubField(stepForms[stepForms.length - 1]);
     } else if (stepForms === this.step2Forms) {
       stepForms.push(
         this._formBuilder.group({
@@ -49,20 +49,24 @@ export class AppComponent implements OnInit {
     stepForms.splice(index, 1);
   }
 
-  getSubFields(form: FormGroup): FormArray {
-    return form.get('subFields') as FormArray;
+  getFormArray(form: FormGroup, arrayName: string): FormArray {
+    return form.get(arrayName) as FormArray;
   }
 
-  getSubFieldControl(form: FormGroup, index: number): FormControl {
-    return this.getSubFields(form).at(index) as FormControl;
+  getFormControl(
+    form: FormGroup,
+    arrayName: string,
+    index: number
+  ): FormControl {
+    return this.getFormArray(form, arrayName).at(index) as FormControl;
   }
 
-  addSubField(form: FormGroup): void {
-    this.getSubFields(form).push(this._formBuilder.control(''));
+  addSubField(form: FormGroup, arrayName: string): void {
+    this.getFormArray(form, arrayName).push(this._formBuilder.control(''));
   }
 
-  removeSubField(form: FormGroup, index: number): void {
-    this.getSubFields(form).removeAt(index);
+  removeSubField(form: FormGroup, arrayName: string, index: number): void {
+    this.getFormArray(form, arrayName).removeAt(index);
   }
 
   submit(): void {

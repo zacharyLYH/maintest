@@ -11,3 +11,11 @@
 .social-link-container .full-width {
   margin-right: 10px; /* or whatever space you want between the input and the button */
 }
+
+h4 {
+  margin-bottom: 5px; /* Reducing the margin-bottom will bring the button closer */
+}
+
+.social-link-container button {
+  margin-bottom: 20px; /* Adjust this value to give the desired space between the button and the next item */
+}

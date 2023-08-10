@@ -12,27 +12,60 @@
           <input matInput formControlName="input1" />
         </mat-form-field>
 
-        <!-- Socials Subfields -->
-        <h4>Socials</h4>
-        <button mat-button (click)="addSubField(form)">Add Social Link</button>
+        <!-- Subfield Subfields -->
+        <h4>Subfield</h4>
+        <button mat-button (click)="addSubField(form, 'subFields')">
+          Add Subfield Link
+        </button>
         <div formArrayName="subFields">
           <div
-            *ngFor="let subField of getSubFields(form).controls; let j = index"
+            *ngFor="
+              let subField of getFormArray(form, 'subFields').controls;
+              let j = index
+            "
+          >
+            <div class="social-link-container">
+              <mat-form-field class="full-width">
+                <input
+                  matInput
+                  placeholder="Subfields"
+                  [formControl]="getFormControl(form, 'subFields', j)"
+                />
+              </mat-form-field>
+              <button mat-button (click)="removeSubField(form, 'subFields', j)">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Links Subfields -->
+        <h4>Links</h4>
+        <button mat-button (click)="addSubField(form, 'links')">
+          Add Social Link
+        </button>
+        <div formArrayName="links">
+          <div
+            *ngFor="
+              let subField of getFormArray(form, 'links').controls;
+              let j = index
+            "
           >
             <div class="social-link-container">
               <mat-form-field class="full-width">
                 <input
                   matInput
                   placeholder="Social Link"
-                  [formControl]="getSubFieldControl(form, j)"
+                  [formControl]="getFormControl(form, 'links', j)"
                 />
               </mat-form-field>
-              <button mat-button (click)="removeSubField(form, j)">
+              <button mat-button (click)="removeSubField(form, 'links', j)">
                 Remove
               </button>
             </div>
           </div>
         </div>
+
         <button mat-button (click)="deleteForm(step1Forms, i)">
           Delete Form
         </button>
