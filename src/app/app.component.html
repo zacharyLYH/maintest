@@ -1,6 +1,7 @@
 <mat-horizontal-stepper [linear]="isLinear">
   <!-- Step 1 -->
   <mat-step [stepControl]="step1Forms[0]">
+    <ng-template matStepLabel>Step 1 Form</ng-template>
     <div *ngFor="let form of step1Forms; let i = index" [formGroup]="form">
       <mat-expansion-panel>
         <mat-expansion-panel-header>
