@@ -11,6 +11,14 @@
         <mat-form-field class="full-width">
           <mat-label>Input 1</mat-label>
           <input matInput formControlName="input1" />
+          <mat-error
+            *ngIf="
+              form.get('input1')?.hasError('required') &&
+              form.get('input1')?.touched
+            "
+          >
+            This field is required.
+          </mat-error>
         </mat-form-field>
 
         <!-- Subfield Subfields -->
@@ -32,6 +40,14 @@
                   placeholder="Subfields"
                   [formControl]="getFormControl(form, 'subFields', j)"
                 />
+                <mat-error
+                  *ngIf="
+                    getFormControl(form, 'subFields', j).hasError('required') &&
+                    getFormControl(form, 'subFields', j).touched
+                  "
+                >
+                  This field is required.
+                </mat-error>
               </mat-form-field>
               <button mat-button (click)="removeSubField(form, 'subFields', j)">
                 Remove
@@ -59,6 +75,22 @@
                   placeholder="Social Link"
                   [formControl]="getFormControl(form, 'links', j)"
                 />
+                <mat-error
+                  *ngIf="
+                    getFormControl(form, 'links', j).hasError('required') &&
+                    getFormControl(form, 'links', j).touched
+                  "
+                >
+                  This field is required.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    getFormControl(form, 'links', j).hasError('pattern') &&
+                    getFormControl(form, 'links', j).touched
+                  "
+                >
+                  Please enter a valid URL.
+                </mat-error>
               </mat-form-field>
               <button mat-button (click)="removeSubField(form, 'links', j)">
                 Remove
@@ -88,11 +120,35 @@
         <mat-form-field class="full-width">
           <mat-label>Input 1</mat-label>
           <input matInput formControlName="input1" />
+          <mat-error
+            *ngIf="
+              form.get('input1')?.hasError('required') &&
+              form.get('input1')?.touched
+            "
+          >
+            This field is required.
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Input 2</mat-label>
           <input matInput formControlName="input2" />
+          <mat-error
+            *ngIf="
+              form.get('input2')?.hasError('required') &&
+              form.get('input2')?.touched
+            "
+          >
+            This field is required.
+          </mat-error>
         </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Is Member?</mat-label>
+          <mat-select formControlName="isMember">
+            <mat-option [value]="true">Yes</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <button mat-button (click)="deleteForm(step2Forms, i)">Delete</button>
       </mat-expansion-panel>
     </form>
@@ -111,6 +167,14 @@
         <mat-form-field class="full-width">
           <mat-label>Textarea</mat-label>
           <textarea matInput formControlName="textarea"></textarea>
+          <mat-error
+            *ngIf="
+              form.get('textarea')?.hasError('required') &&
+              form.get('textarea')?.touched
+            "
+          >
+            This field is required.
+          </mat-error>
         </mat-form-field>
         <button mat-button (click)="deleteForm(step3Forms, i)">Delete</button>
       </mat-expansion-panel>
@@ -122,6 +186,13 @@
   <mat-step>
     <ng-template matStepLabel>Submit</ng-template>
     <p>Review and submit your data.</p>
-    <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="submit()"
+      [disabled]="!allFormsAreValid()"
+    >
+      Submit
+    </button>
   </mat-step>
 </mat-horizontal-stepper>

@@ -10,6 +10,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatButtonModule,
     BrowserAnimationsModule,
     MatExpansionModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

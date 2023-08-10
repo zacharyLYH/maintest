@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +25,10 @@ export class AppComponent implements OnInit {
     },
     { input1: 'Example 2', subFields: [], links: [] },
   ];
-  initialStep2Data = [{ input1: 'Step 2 Example 1', input2: 'Value 2A' }];
+  initialStep2Data = [
+    { input1: 'Step 2 Example 1', input2: 'Value 2A', isMember: true },
+  ];
+
   initialStep3Data = [{ textarea: 'Step 3 example content.' }];
 
   constructor(private _formBuilder: FormBuilder) {}
@@ -41,20 +50,32 @@ export class AppComponent implements OnInit {
       switch (stepType) {
         case 'step1':
           formGroup = this._formBuilder.group({
-            input1: data.input1,
-            subFields: this._formBuilder.array(data.subFields || []),
-            links: this._formBuilder.array(data.links || []),
+            input1: [data.input1, Validators.required],
+            subFields: this._formBuilder.array(
+              (data.subFields || []).map((subField: string) =>
+                this._formBuilder.control(subField, Validators.required)
+              )
+            ),
+            links: this._formBuilder.array(
+              (data.links || []).map((link: string) =>
+                this._formBuilder.control(link, [
+                  Validators.required,
+                  Validators.pattern(this.urlPattern),
+                ])
+              )
+            ),
           });
           break;
         case 'step2':
           formGroup = this._formBuilder.group({
-            input1: data.input1,
-            input2: data.input2,
+            input1: [data.input1, Validators.required],
+            input2: [data.input2, Validators.required],
+            isMember: [data.isMember],
           });
           break;
         case 'step3':
           formGroup = this._formBuilder.group({
-            textarea: data.textarea,
+            textarea: [data.textarea, Validators.required],
           });
           break;
         default:
@@ -63,27 +84,30 @@ export class AppComponent implements OnInit {
       stepForms.push(formGroup);
     }
   }
-
+  urlPattern = 'https?://.+';
   addForm(stepForms: FormGroup[]): void {
+    const urlPattern = 'https?://.+';
+
     if (stepForms === this.step1Forms) {
       stepForms.push(
         this._formBuilder.group({
-          input1: '',
-          subFields: this._formBuilder.array([]),
-          links: this._formBuilder.array([]),
+          input1: ['', Validators.required],
+          subFields: this._formBuilder.array([], Validators.required),
+          links: this._formBuilder.array([], Validators.pattern(urlPattern)),
         })
       );
     } else if (stepForms === this.step2Forms) {
       stepForms.push(
         this._formBuilder.group({
-          input1: '',
-          input2: '',
+          input1: ['', Validators.required],
+          input2: ['', Validators.required],
+          isMember: [false],
         })
       );
     } else {
       stepForms.push(
         this._formBuilder.group({
-          textarea: '',
+          textarea: ['', Validators.required],
         })
       );
     }
@@ -106,11 +130,28 @@ export class AppComponent implements OnInit {
   }
 
   addSubField(form: FormGroup, arrayName: string): void {
-    this.getFormArray(form, arrayName).push(this._formBuilder.control(''));
+    if (arrayName === 'links') {
+      this.getFormArray(form, arrayName).push(
+        this._formBuilder.control('', [
+          Validators.required,
+          Validators.pattern(this.urlPattern),
+        ])
+      );
+    } else {
+      this.getFormArray(form, arrayName).push(
+        this._formBuilder.control('', Validators.required)
+      );
+    }
   }
 
   removeSubField(form: FormGroup, arrayName: string, index: number): void {
     this.getFormArray(form, arrayName).removeAt(index);
+  }
+
+  allFormsAreValid(): boolean {
+    return [...this.step1Forms, ...this.step2Forms, ...this.step3Forms].every(
+      (form) => form.valid
+    );
   }
 
   submit(): void {
