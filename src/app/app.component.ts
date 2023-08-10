@@ -1,20 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-interface Step1Form {
-  input1: string;
-  subFields: string[];
-}
-
-export interface Step2Form {
-  input1: string;
-  input2: string;
-}
-
-export interface Step3Form {
-  textarea: string;
-}
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -42,39 +28,27 @@ export class AppComponent implements OnInit {
           subFields: this._formBuilder.array([]),
         })
       );
+      this.addSubField(stepForms[stepForms.length - 1]);
     } else if (stepForms === this.step2Forms) {
       stepForms.push(
-        this._formBuilder.group<Step2Form>({
+        this._formBuilder.group({
           input1: '',
           input2: '',
         })
       );
-    } else if (stepForms === this.step3Forms) {
+    } else {
       stepForms.push(
-        this._formBuilder.group<Step3Form>({
+        this._formBuilder.group({
           textarea: '',
         })
       );
     }
   }
 
-  deleteForm(formsArray: FormGroup[], index: number): void {
-    // Remove the form at the given index
-    formsArray.splice(index, 1);
+  deleteForm(stepForms: FormGroup[], index: number): void {
+    stepForms.splice(index, 1);
   }
 
-  getFormControl(formGroup: FormGroup, controlName: string): FormControl {
-    return formGroup.get(controlName) as FormControl;
-  }
-
-  submit(): void {
-    // For demonstration purposes, printing the form data
-    console.log(this.step1Forms.map((form) => form.value as Step1Form));
-    console.log(this.step2Forms.map((form) => form.value as Step2Form));
-    console.log(this.step3Forms.map((form) => form.value as Step3Form));
-  }
-
-  // Helper function to get subFields FormArray from a form
   getSubFields(form: FormGroup): FormArray {
     return form.get('subFields') as FormArray;
   }
@@ -83,13 +57,19 @@ export class AppComponent implements OnInit {
     return this.getSubFields(form).at(index) as FormControl;
   }
 
-  // Add a subField to the specified form's subFields
   addSubField(form: FormGroup): void {
-    this.getSubFields(form).push(new FormControl(''));
+    this.getSubFields(form).push(this._formBuilder.control(''));
   }
 
-  // Remove a subField from the specified form's subFields at a given index
   removeSubField(form: FormGroup, index: number): void {
     this.getSubFields(form).removeAt(index);
+  }
+
+  submit(): void {
+    console.log({
+      step1: this.step1Forms.map((form) => form.value),
+      step2: this.step2Forms.map((form) => form.value),
+      step3: this.step3Forms.map((form) => form.value),
+    });
   }
 }

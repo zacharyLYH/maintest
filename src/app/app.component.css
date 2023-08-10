@@ -2,3 +2,12 @@
   width: 100%;
   margin-bottom: 10px;
 }
+
+.social-link-container {
+  display: flex;
+  align-items: center; /* Vertically align items in the center */
+}
+
+.social-link-container .full-width {
+  margin-right: 10px; /* or whatever space you want between the input and the button */
+}

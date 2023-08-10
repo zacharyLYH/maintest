@@ -12,22 +12,27 @@
           <input matInput formControlName="input1" />
         </mat-form-field>
 
-        <!-- Dynamic Subfields -->
+        <!-- Socials Subfields -->
+        <h4>Socials</h4>
+        <button mat-button (click)="addSubField(form)">Add Social Link</button>
         <div formArrayName="subFields">
           <div
             *ngFor="let subField of getSubFields(form).controls; let j = index"
           >
-            <mat-form-field class="full-width">
-              <mat-label>SubField {{ j + 1 }}</mat-label>
-              <input matInput [formControl]="getSubFieldControl(form, j)" />
-            </mat-form-field>
-            <button mat-button (click)="removeSubField(form, j)">
-              Remove SubField
-            </button>
+            <div class="social-link-container">
+              <mat-form-field class="full-width">
+                <input
+                  matInput
+                  placeholder="Social Link"
+                  [formControl]="getSubFieldControl(form, j)"
+                />
+              </mat-form-field>
+              <button mat-button (click)="removeSubField(form, j)">
+                Remove
+              </button>
+            </div>
           </div>
         </div>
-
-        <button mat-button (click)="addSubField(form)">Add SubField</button>
         <button mat-button (click)="deleteForm(step1Forms, i)">
           Delete Form
         </button>
@@ -73,10 +78,10 @@
           <mat-label>Textarea</mat-label>
           <textarea matInput formControlName="textarea"></textarea>
         </mat-form-field>
+        <button mat-button (click)="deleteForm(step3Forms, i)">Delete</button>
       </mat-expansion-panel>
-      <button mat-button (click)="deleteForm(step3Forms, i)">Delete</button>
+      <button mat-button (click)="addForm(step3Forms)">Add Another Form</button>
     </form>
-    <button mat-button (click)="addForm(step3Forms)">Add Another Form</button>
   </mat-step>
 
   <!-- Submission Step -->
