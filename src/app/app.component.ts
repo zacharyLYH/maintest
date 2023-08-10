@@ -56,8 +56,9 @@ export class AppComponent implements OnInit {
     }
   }
 
-  removeForm(stepForms: FormGroup[], index: number): void {
-    stepForms.splice(index, 1);
+  deleteForm(formsArray: FormGroup[], index: number): void {
+    // Remove the form at the given index
+    formsArray.splice(index, 1);
   }
 
   getFormControl(formGroup: FormGroup, controlName: string): FormControl {

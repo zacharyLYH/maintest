@@ -1,7 +1,7 @@
 <mat-horizontal-stepper [linear]="isLinear">
   <!-- Step 1 -->
   <mat-step [stepControl]="step1Forms[0]">
-    <form *ngFor="let form of step1Forms" [formGroup]="form">
+    <form *ngFor="let form of step1Forms; let i = index" [formGroup]="form">
       <ng-template matStepLabel>Step 1 Form</ng-template>
 
       <mat-expansion-panel>
@@ -12,6 +12,7 @@
           <mat-label>Input 1</mat-label>
           <input matInput formControlName="input1" />
         </mat-form-field>
+        <button mat-button (click)="deleteForm(step1Forms, i)">Delete</button>
       </mat-expansion-panel>
     </form>
     <button mat-button (click)="addForm(step1Forms)">Add Another Form</button>
@@ -19,7 +20,7 @@
 
   <!-- Step 2 -->
   <mat-step [stepControl]="step2Forms[0]">
-    <form *ngFor="let form of step2Forms" [formGroup]="form">
+    <form *ngFor="let form of step2Forms; let i = index" [formGroup]="form">
       <ng-template matStepLabel>Step 2 Form</ng-template>
 
       <mat-expansion-panel>
@@ -34,6 +35,7 @@
           <mat-label>Input 2</mat-label>
           <input matInput formControlName="input2" />
         </mat-form-field>
+        <button mat-button (click)="deleteForm(step2Forms, i)">Delete</button>
       </mat-expansion-panel>
     </form>
     <button mat-button (click)="addForm(step2Forms)">Add Another Form</button>
@@ -41,7 +43,7 @@
 
   <!-- Step 3 -->
   <mat-step [stepControl]="step3Forms[0]">
-    <form *ngFor="let form of step3Forms" [formGroup]="form">
+    <form *ngFor="let form of step3Forms; let i = index" [formGroup]="form">
       <ng-template matStepLabel>Step 3 Form</ng-template>
 
       <mat-expansion-panel>
@@ -53,6 +55,7 @@
           <textarea matInput formControlName="textarea"></textarea>
         </mat-form-field>
       </mat-expansion-panel>
+      <button mat-button (click)="deleteForm(step3Forms, i)">Delete</button>
     </form>
     <button mat-button (click)="addForm(step3Forms)">Add Another Form</button>
   </mat-step>
