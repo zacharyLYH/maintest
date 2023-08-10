@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-export interface Step1Form {
+interface Step1Form {
   input1: string;
+  subFields: string[];
 }
 
 export interface Step2Form {
@@ -36,8 +37,9 @@ export class AppComponent implements OnInit {
   addForm(stepForms: FormGroup[]): void {
     if (stepForms === this.step1Forms) {
       stepForms.push(
-        this._formBuilder.group<Step1Form>({
+        this._formBuilder.group({
           input1: '',
+          subFields: this._formBuilder.array([]),
         })
       );
     } else if (stepForms === this.step2Forms) {
@@ -70,5 +72,24 @@ export class AppComponent implements OnInit {
     console.log(this.step1Forms.map((form) => form.value as Step1Form));
     console.log(this.step2Forms.map((form) => form.value as Step2Form));
     console.log(this.step3Forms.map((form) => form.value as Step3Form));
+  }
+
+  // Helper function to get subFields FormArray from a form
+  getSubFields(form: FormGroup): FormArray {
+    return form.get('subFields') as FormArray;
+  }
+
+  getSubFieldControl(form: FormGroup, index: number): FormControl {
+    return this.getSubFields(form).at(index) as FormControl;
+  }
+
+  // Add a subField to the specified form's subFields
+  addSubField(form: FormGroup): void {
+    this.getSubFields(form).push(new FormControl(''));
+  }
+
+  // Remove a subField from the specified form's subFields at a given index
+  removeSubField(form: FormGroup, index: number): void {
+    this.getSubFields(form).removeAt(index);
   }
 }

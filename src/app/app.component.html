@@ -1,20 +1,39 @@
 <mat-horizontal-stepper [linear]="isLinear">
   <!-- Step 1 -->
   <mat-step [stepControl]="step1Forms[0]">
-    <form *ngFor="let form of step1Forms; let i = index" [formGroup]="form">
-      <ng-template matStepLabel>Step 1 Form</ng-template>
-
+    <div *ngFor="let form of step1Forms; let i = index" [formGroup]="form">
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           Step 1 Form Instance
         </mat-expansion-panel-header>
+
         <mat-form-field class="full-width">
           <mat-label>Input 1</mat-label>
           <input matInput formControlName="input1" />
         </mat-form-field>
-        <button mat-button (click)="deleteForm(step1Forms, i)">Delete</button>
+
+        <!-- Dynamic Subfields -->
+        <div formArrayName="subFields">
+          <div
+            *ngFor="let subField of getSubFields(form).controls; let j = index"
+          >
+            <mat-form-field class="full-width">
+              <mat-label>SubField {{ j + 1 }}</mat-label>
+              <input matInput [formControl]="getSubFieldControl(form, j)" />
+            </mat-form-field>
+            <button mat-button (click)="removeSubField(form, j)">
+              Remove SubField
+            </button>
+          </div>
+        </div>
+
+        <button mat-button (click)="addSubField(form)">Add SubField</button>
+        <button mat-button (click)="deleteForm(step1Forms, i)">
+          Delete Form
+        </button>
       </mat-expansion-panel>
-    </form>
+    </div>
+
     <button mat-button (click)="addForm(step1Forms)">Add Another Form</button>
   </mat-step>
 
