@@ -11,13 +11,57 @@ export class AppComponent implements OnInit {
   step1Forms: FormGroup[] = [];
   step2Forms: FormGroup[] = [];
   step3Forms: FormGroup[] = [];
+  initialStep1Data = [
+    {
+      input1: 'Example 1',
+      subFields: ['SubField 1A', 'SubField 1B'],
+      links: ['Link 1A'],
+    },
+    { input1: 'Example 2', subFields: [], links: [] },
+  ];
+  initialStep2Data = [{ input1: 'Step 2 Example 1', input2: 'Value 2A' }];
+  initialStep3Data = [{ textarea: 'Step 3 example content.' }];
 
   constructor(private _formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.addForm(this.step1Forms);
-    this.addForm(this.step2Forms);
-    this.addForm(this.step3Forms);
+    this.initFormsFromData(this.initialStep1Data, this.step1Forms, 'step1');
+    this.initFormsFromData(this.initialStep2Data, this.step2Forms, 'step2');
+    this.initFormsFromData(this.initialStep3Data, this.step3Forms, 'step3');
+  }
+
+  initFormsFromData(
+    initialData: any[],
+    stepForms: FormGroup[],
+    stepType: string
+  ) {
+    for (let data of initialData) {
+      let formGroup: FormGroup = this._formBuilder.group({});
+
+      switch (stepType) {
+        case 'step1':
+          formGroup = this._formBuilder.group({
+            input1: data.input1,
+            subFields: this._formBuilder.array(data.subFields || []),
+            links: this._formBuilder.array(data.links || []),
+          });
+          break;
+        case 'step2':
+          formGroup = this._formBuilder.group({
+            input1: data.input1,
+            input2: data.input2,
+          });
+          break;
+        case 'step3':
+          formGroup = this._formBuilder.group({
+            textarea: data.textarea,
+          });
+          break;
+        default:
+          throw new Error(`Unknown stepType: ${stepType}`);
+      }
+      stepForms.push(formGroup);
+    }
   }
 
   addForm(stepForms: FormGroup[]): void {
